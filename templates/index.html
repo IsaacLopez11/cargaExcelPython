@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carga Excel</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 6px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .resultados {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Subir archivo Excel</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="archivo" required>
+    <button type="submit">Procesar</button>
+</form>
+
+{% if personas %}
+    <h3>Datos del Excel</h3>
+    <table>
+        <thead>
+            <tr>
+                {% for key in personas[0].keys() %}
+                    <th>{{ key }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for persona in personas %}
+                <tr>
+                    {% for value in persona.values() %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if resultados.error %}
+    <p style="color:red">{{ resultados.error }}</p>
+{% endif %}
+
+{% if resultados.sueldo_max %}
+<div class="resultados">
+    <h3>Resultados</h3>
+    <p><strong>Sueldo más alto:</strong> {{ resultados.sueldo_max }}</p>
+    <p><strong>Persona más joven:</strong> {{ resultados.persona_mas_joven }}</p>
+    <p><strong>Edad promedio:</strong> {{ resultados.edad_promedio }}</p>
+</div>
+{% endif %}
+</body>
+</html>
