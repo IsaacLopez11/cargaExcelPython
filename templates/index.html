@@ -53,17 +53,5 @@
     </table>
 {% endif %}
 
-{% if resultados.error %}
-    <p style="color:red">{{ resultados.error }}</p>
-{% endif %}
-
-{% if resultados.sueldo_max %}
-<div class="resultados">
-    <h3>Resultados</h3>
-    <p><strong>Sueldo más alto:</strong> {{ resultados.sueldo_max }}</p>
-    <p><strong>Persona más joven:</strong> {{ resultados.persona_mas_joven }}</p>
-    <p><strong>Edad promedio:</strong> {{ resultados.edad_promedio }}</p>
-</div>
-{% endif %}
 </body>
 </html>

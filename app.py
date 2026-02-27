@@ -25,18 +25,13 @@ def index():
             ruta = os.path.join(app.config["UPLOAD_FOLDER"], archivo.filename)
             archivo.save(ruta)
 
-            # 🔥 Leer Excel aquí (NO dentro de calcular)
             df = pd.read_excel(ruta)
-
-            # Convertir a lista para mostrar en tabla
+                       
             personas = df.to_dict(orient="records")
-
-            # Enviar DataFrame a la función de cálculos
-            resultados = calcular(df)
-
+            
     return render_template("index.html",
                            personas=personas,
-                           resultados=resultados)
+                           )
 
 @app.route("/ventas", methods=["GET", "POST"])
 def ventas():
