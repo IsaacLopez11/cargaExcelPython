@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ventas</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .tabla-container {
+            max-height: 300px;
+            overflow-y: scroll;
+            border: 1px solid black;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .grafico-container {
+            width: 600px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Subir archivo de Ventas</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="archivo" required>
+    <button type="submit">Procesar</button>
+</form>
+
+{% if datos %}
+
+<h3>Grilla de Datos</h3>
+
+<div class="tabla-container">
+<table>
+    <thead>
+        <tr>
+            {% for key in datos[0].keys() %}
+                <th>{{ key }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for fila in datos %}
+        <tr>
+            {% for value in fila.values() %}
+                <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+<div style="margin-top:20px;">
+    <button onclick="mostrarVentasMes()">Ventas por Mes</button>
+    <button onclick="mostrarVentasCategoria()">Ventas por Categoría</button>
+    <button onclick="mostrarTopVendedor()">Vendedor Top 1</button>
+</div>
+
+<h3>Resultados</h3>
+<p><strong>Vendedor Top 1:</strong> {{ resultados.top_vendedor }}</p>
+
+<div class="grafico-container">
+    <canvas id="ventasChart"></canvas>
+</div>
+
+<script>
+    const ventasMes = {{ ventas_mes | tojson }};
+    const ventasCategoria = {{ ventas_categoria | tojson }};
+    const topVendedor = "{{ top_vendedor }}";
+
+    let chart;
+
+    function crearGrafico(labels, data, titulo) {
+        const ctx = document.getElementById("ventasChart").getContext("2d");
+
+        if (chart) {
+            chart.destroy();
+        }
+
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: titulo,
+                    data: data
+                }]
+            }
+        });
+    }
+
+    function mostrarVentasMes() {
+        crearGrafico(
+            Object.keys(ventasMes),
+            Object.values(ventasMes),
+            "Ventas por Mes"
+        );
+    }
+
+    function mostrarVentasCategoria() {
+        crearGrafico(
+            Object.keys(ventasCategoria),
+            Object.values(ventasCategoria),
+            "Ventas por Categoría"
+        );
+    }
+
+    function mostrarTopVendedor() {
+        alert("🏆 Vendedor Top 1: " + topVendedor);
+    }
+</script>
+
+{% endif %}
+
+</body>
+</html>
